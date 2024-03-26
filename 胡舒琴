@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <limits.h>
+
+#define MAX_N 5
+#define MAX_V 9
+
+int max(int a, int b) {//代码中定义了一个max函数，用于比较两个整数的大小，并返回较大的一个
+    return a > b ? a : b;
+}
+
+int max_value(int w[], int v[], int n, int c) {//用于计算前n个物品中选取一些物品装入容量为c的背包可以获得的最大价值 
+    int dp[MAX_N + 1][MAX_V + 1];
+    for (int i = 0; i <= n; i++) {
+        for (int j = 0; j <= c; j++) {
+            if (i == 0 || j == 0) {
+                dp[i][j] = 0;
+            } else {
+                dp[i][j] = dp[i - 1][j];
+                if (j >= w[i - 1]) {
+                    dp[i][j] = max(dp[i][j], dp[i - 1][j - w[i - 1]] + v[i - 1]);
+                }
+            }
+        }
+    }
+    return dp[n][c];
+}
+
+int main() {//定义四个物品的重量和价值，以及背包的容量
+    int w[] = {2, 3, 4, 5};
+    int v[] = {3, 4, 5, 6};
+    int n = 4;
+    int c = 8;
+    printf("%d\n", max_value(w, v, n, c));
+    return 0;
+}
